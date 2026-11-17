@@ -1,13 +1,17 @@
 import { useMemo, useState, type ReactNode } from 'react'
+import { Link } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
-import { BookOpen, CheckCircle2, Clock, Compass, Flame, GraduationCap, PlayCircle } from 'lucide-react'
+import { BookOpen, CheckCircle2, Clock, Compass, Flame, PlayCircle } from 'lucide-react'
+import { buttonClasses } from '@/components/ui/buttonStyles'
 import { Badge, EmptyState, ErrorState, Progress, Skeleton } from '@/components/ui/Feedback'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
+import { CourseThumb } from '@/components/ui/CourseThumb'
 import { ProgressRing } from '@/components/ui/ProgressRing'
+import { CourseTile } from './CourseTile'
 import { useAuth } from '@/context/AuthContext'
 import { api, getErrorMessage } from '@/lib/api'
-import { formatHours, formatRelative, greeting } from '@/lib/format'
+import { formatHours, formatRelative, greeting, levelLabels } from '@/lib/format'
 import type { EnrolledCourse, StudentDashboard, StudentTimeAnalytics } from '@/types'
 
 const CHART_DAYS = 14
@@ -46,27 +50,18 @@ function Stat({ label, value, icon }: StatProps) {
   )
 }
 
-function CourseThumb({ course, className }: { course: EnrolledCourse; className?: string }) {
-  return course.thumbnail ? (
-    <img src={course.thumbnail} alt="" loading="lazy" className={className} />
-  ) : (
-    <div className={`flex items-center justify-center bg-brand-gradient text-on-primary ${className ?? ''}`} aria-hidden="true">
-      <GraduationCap className="size-8" />
-    </div>
-  )
-}
-
 function ContinueCard({ course }: { course: EnrolledCourse }) {
   const { progress } = course
   return (
-    <Card className="overflow-hidden">
+    <Link to={`/courses/${course.courseId}`} className="group block rounded-2xl focus-visible:outline-offset-4" aria-label={`Continue ${course.title}`}>
+    <Card className="overflow-hidden transition-shadow group-hover:shadow-float">
       <div className="flex flex-col sm:flex-row">
-        <CourseThumb course={course} className="h-40 w-full object-cover sm:h-auto sm:w-56" />
+        <CourseThumb src={course.thumbnail} className="h-40 w-full sm:h-auto sm:w-56" />
         <div className="flex flex-1 flex-col justify-between gap-4 p-6">
           <div>
             <div className="mb-2 flex flex-wrap items-center gap-2">
               <Badge tone="brand">{course.category}</Badge>
-              <Badge>{course.level}</Badge>
+              <Badge>{levelLabels[course.level] ?? course.level}</Badge>
             </div>
             <h3 className="text-xl font-bold tracking-tight text-foreground">{course.title}</h3>
             {course.shortDescription && <p className="mt-1 line-clamp-2 text-sm text-muted">{course.shortDescription}</p>}
@@ -83,30 +78,7 @@ function ContinueCard({ course }: { course: EnrolledCourse }) {
         </div>
       </div>
     </Card>
-  )
-}
-
-function CourseTile({ course }: { course: EnrolledCourse }) {
-  return (
-    <Card className="flex flex-col overflow-hidden transition-shadow hover:shadow-float">
-      <CourseThumb course={course} className="h-32 w-full object-cover" />
-      <div className="flex flex-1 flex-col gap-3 p-5">
-        <div className="flex flex-wrap gap-2">
-          <Badge tone="brand">{course.category}</Badge>
-          <Badge>{course.level}</Badge>
-        </div>
-        <h3 className="line-clamp-2 font-semibold leading-snug text-foreground">{course.title}</h3>
-        <div className="mt-auto">
-          <div className="mb-2 flex justify-between text-xs text-muted">
-            <span>
-              {course.progress.completedLessons}/{course.progress.totalLessons} lessons
-            </span>
-            <span className="font-semibold text-foreground">{course.progress.percentage}%</span>
-          </div>
-          <Progress value={course.progress.percentage} label={`${course.title} progress`} />
-        </div>
-      </div>
-    </Card>
+    </Link>
   )
 }
 
@@ -242,7 +214,8 @@ export function StudentDashboardPage() {
             <EmptyState
               icon={<Compass className="size-7" />}
               title="You are not enrolled in any courses yet"
-              description="Once you enroll in a course, your progress, recent lessons and study time will appear here. The course catalog is coming in the next step."
+              description="Once you enroll in a course, your progress, recent lessons and study time will appear here."
+              action={<Link to="/courses" className={buttonClasses()}>Browse the catalog</Link>}
             />
           ) : (
             <>

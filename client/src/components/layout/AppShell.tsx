@@ -74,9 +74,9 @@ export function AppShell() {
       </a>
 
       {/* Desktop sidebar */}
-      <aside className={cn('fixed inset-y-0 left-0 z-30 hidden transition-[width] duration-200 lg:block', collapsed ? 'w-[76px]' : 'w-64')}>
+      <div className={cn('fixed inset-y-0 left-0 z-30 hidden transition-[width] duration-200 lg:block', collapsed ? 'w-[76px]' : 'w-64')}>
         <Sidebar role={user.role} collapsed={collapsed} onToggleCollapsed={toggleCollapsed} />
-      </aside>
+      </div>
 
       {/* Mobile drawer */}
       {drawerOpen && (

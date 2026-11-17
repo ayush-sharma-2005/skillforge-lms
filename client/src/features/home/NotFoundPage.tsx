@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Button } from '@/components/ui/Button'
+import { buttonClasses } from '@/components/ui/buttonStyles'
 import { Logo } from '@/components/ui/Logo'
 
 export function NotFoundPage() {
@@ -11,8 +11,8 @@ export function NotFoundPage() {
         <h1 className="text-2xl font-bold text-foreground">Page not found</h1>
         <p className="mt-1 text-muted">The page you are looking for does not exist or has moved.</p>
       </div>
-      <Link to="/dashboard">
-        <Button size="lg">Back to dashboard</Button>
+      <Link to="/dashboard" className={buttonClasses({ size: 'lg' })}>
+        Back to dashboard
       </Link>
     </main>
   )

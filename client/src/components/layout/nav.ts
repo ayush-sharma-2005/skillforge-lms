@@ -23,8 +23,8 @@ export interface NavItem {
 
 const student: NavItem[] = [
   { label: 'Dashboard', to: '/dashboard', icon: LayoutDashboard },
-  { label: 'My Courses', to: '/my-courses', icon: BookOpen, soon: true },
-  { label: 'Course Catalog', to: '/courses', icon: Compass, soon: true },
+  { label: 'My Courses', to: '/my-courses', icon: BookOpen },
+  { label: 'Course Catalog', to: '/courses', icon: Compass },
   { label: 'Learning Paths', to: '/paths', icon: Route, soon: true },
   { label: 'Assignments', to: '/assignments', icon: ClipboardCheck, soon: true },
   { label: 'Certificates', to: '/certificates', icon: Award, soon: true },
@@ -32,6 +32,7 @@ const student: NavItem[] = [
 
 const instructor: NavItem[] = [
   { label: 'Dashboard', to: '/dashboard', icon: LayoutDashboard },
+  { label: 'Course Catalog', to: '/courses', icon: Compass },
   { label: 'Analytics', to: '/instructor/analytics', icon: BarChart3, soon: true },
   { label: 'My Courses', to: '/instructor/courses', icon: Library, soon: true },
   { label: 'Assignments', to: '/instructor/assignments', icon: ClipboardCheck, soon: true },
@@ -45,6 +46,7 @@ const orgAdmin: NavItem[] = [
 
 const admin: NavItem[] = [
   { label: 'Dashboard', to: '/dashboard', icon: LayoutDashboard },
+  { label: 'Course Catalog', to: '/courses', icon: Compass },
   { label: 'Courses', to: '/admin/courses', icon: Library, soon: true },
   { label: 'Users', to: '/admin/users', icon: Users, soon: true },
 ]

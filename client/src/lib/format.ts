@@ -49,3 +49,47 @@ export const roleLabels: Record<string, string> = {
   admin: 'Admin',
   org_admin: 'Organization admin',
 }
+
+const CURRENCY: string = (import.meta.env.VITE_CURRENCY as string | undefined) ?? 'INR'
+
+/** The API stores a bare number with no currency, so the currency is configurable. */
+export function formatPrice(price: number): string {
+  if (price <= 0) return 'Free'
+  try {
+    return new Intl.NumberFormat(undefined, { style: 'currency', currency: CURRENCY, maximumFractionDigits: 0 }).format(price)
+  } catch {
+    return String(price)
+  }
+}
+
+/** Lesson durations are stored in seconds. */
+export function formatDuration(seconds: number): string {
+  if (!Number.isFinite(seconds) || seconds <= 0) return '0 min'
+  const minutes = Math.max(1, Math.round(seconds / 60))
+  if (minutes < 60) return `${minutes} min`
+  const hours = Math.floor(minutes / 60)
+  const rest = minutes % 60
+  return rest ? `${hours} h ${rest} min` : `${hours} h`
+}
+
+export function formatDateTime(value: string | null | undefined): string {
+  if (!value) return ''
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return ''
+  return date.toLocaleString(undefined, { day: 'numeric', month: 'short', year: 'numeric', hour: 'numeric', minute: '2-digit' })
+}
+
+export const levelLabels: Record<string, string> = {
+  beginner: 'Beginner',
+  intermediate: 'Intermediate',
+  advanced: 'Advanced',
+}
+
+/** "hi" -> "Hindi", using the browser's own language names. */
+export function languageName(code: string): string {
+  try {
+    return new Intl.DisplayNames([navigator.language || 'en'], { type: 'language' }).of(code) ?? code
+  } catch {
+    return code
+  }
+}
