@@ -62,16 +62,6 @@ app.get("/api/health", (_req, res) => {
   });
 });
 
-app.get("/api/auth/me", authenticate, (req: AuthRequest, res) => {
-  res.status(200).json({
-    success: true,
-    data: {
-      userId: req.userId,
-      role: req.userRole,
-    },
-  });
-});
-
 app.get(
   "/api/admin/test",
   authenticate,
